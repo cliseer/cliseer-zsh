@@ -11,6 +11,14 @@ maybe_run() {
   fi
 }
 
+cliprophesy_dependency() {
+  if command -v cliprophesy >/dev/null 2>&1; then
+     return 0
+  fi
+
+  maybe_run "pip install cliprophesy"
+}
+
 config_dependency() {
   mkdir -p ~/.config/cliseer
   curl -fsSL \
@@ -20,10 +28,10 @@ config_dependency() {
 }
 
 cliseer_fzf_dependency() {
-  if command -v fzf >/dev/null 2>&1; then
-    echo "fzf is installed"
-    return 0
-  fi
+    if command -v fzf >/dev/null 2>&1; then
+        echo "fzf is installed"
+        return 0
+    fi
 
   echo "fzf, command-line fuzzy finder, is required"
 
@@ -42,3 +50,4 @@ cliseer_fzf_dependency() {
 # === Run the setup steps ===
 config_dependency
 cliseer_fzf_dependency
+cliprophesy_dependency
