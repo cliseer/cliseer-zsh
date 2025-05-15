@@ -47,7 +47,6 @@ cliprophesy_dependency() {
     esac
 }
 
-
 config_dependency() {
     mkdir -p ~/.config/cliseer
     url=$(curl -s https://api.github.com/repos/cliseer/cliprophesy/releases/latest \
