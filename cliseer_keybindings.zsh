@@ -13,5 +13,6 @@ cliseer_suggest_widget() {
 zle -N cliseer_suggest_widget
 # Bind Ctrl-Space (represented as ^@)
 bindkey '^@' cliseer_suggest_widget
+bindkey '^G' cliseer_suggest_widget
 
 typeset -x HISTFILE

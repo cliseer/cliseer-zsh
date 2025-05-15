@@ -83,5 +83,4 @@ config_dependency
 cliseer_fzf_dependency
 cliprophesy_dependency
 
-echo "Dependency install script"
-
+echo "Dependency install script completed"
