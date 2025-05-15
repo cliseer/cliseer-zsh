@@ -49,11 +49,15 @@ cliprophesy_dependency() {
 
 
 config_dependency() {
-  mkdir -p ~/.config/cliseer
-  curl -fsSL \
-    https://gist.githubusercontent.com/ygreif/f9879149afbe2382006c867fe099dce8/raw/6874a3989e4bf2886183cf94ee743d399beebd40/gistfile1.txt \
-    -o ~/.config/cliseer/settings.cfg
-  echo "Configure cliseer AI provider in ~/.config/cliseer/settings.cfg"
+    mkdir -p ~/.config/cliseer
+    url=$(curl -s https://api.github.com/repos/cliseer/cliprophesy/releases/latest \
+              | grep "browser_download_url" \
+              | grep "settings.cfg" \
+              | cut -d '"' -f 4)
+
+    curl -L "$url" -o ~/.config/cliseer/settings.cfg
+
+    echo "Configure cliseer AI provider in ~/.config/cliseer/settings.cfg"
 }
 
 cliseer_fzf_dependency() {
