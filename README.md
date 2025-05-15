@@ -34,11 +34,12 @@ Use `$ZSH_CUSTOM` instead of `$ZSH/custom` if set.
 ### Option 2: No plugins
 ``` zsh
 git clone https://github.com/cliseer/cliseer-zsh
+# set to where you want to store your plugin
 ZSH_PLUGINS=~/.zsh_plugins/
 mkdir -p $ZSH_PLUGINS
 cp cliseer.plugin.zsh $ZSH_PLUGINS
 # add source ~/.zsh-plugins/cliseer.plugin.zsh to your ~/.zshrc file
-bash cliseer_dependencies.sh # installs the dependencies
+bash install_cliseer_dependencies.sh
 source ~/.zshrc
 ```
 
