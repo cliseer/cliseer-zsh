@@ -1,35 +1,63 @@
 #!/usr/bin/env bash
 
 maybe_run() {
-  local cmd="$*"
-  read -p "Do you want to run: $cmd [y/N] " response
-  if [[ "$response" == "y" || "$response" == "Y" ]]; then
-    echo "Running: $cmd"
-    eval "$cmd"
-  else
-    echo "Skipped: $cmd"
-  fi
+    local cmd="$*"
+    read -p "Do you want to run: $cmd [y/N] " response
+    if [[ "$response" == "y" || "$response" == "Y" ]]; then
+        echo "Running: $cmd"
+        eval "$cmd"
+    else
+        echo "Skipped: $cmd"
+    fi
 }
 
 cliprophesy_dependency() {
-  if command -v cliprophesy >/dev/null 2>&1; then
-     return 0
-  fi
+    if command -v cliprophesy >/dev/null 2>&1; then
+        return 0
+    fi
 
-  maybe_run "pip install cliprophesy"
+    uname_out="$(uname)"
+    case "$uname_out" in
+        Linux)
+            binary_name="cliprophesy-linux"
+            ;;
+        Darwin)
+            binary_name="cliprophesy-macos"
+            ;;
+        *)
+            echo "Unsupported OS: $uname_out"
+            return 1
+            ;;
+    esac
+
+    bin_dir="$HOME/.local/bin"
+    mkdir -p "$bin_dir"
+
+    url="https://github.com/cliseer/cliprophesy/releases/latest/download/$binary_name"
+    dest="$bin_dir/cliprophesy"
+
+    echo "CLIProphesy command line tool required"
+    maybe_run "curl -L \"$url\" -o \"$dest\" && chmod +x \"$dest\""
+
+    case ":$PATH:" in
+        *":$bin_dir:"*) ;;
+        *)
+            echo "Warning: $bin_dir needs to be in path for completions to be generated"
+            ;;
+    esac
 }
+
 
 config_dependency() {
   mkdir -p ~/.config/cliseer
   curl -fsSL \
     https://gist.githubusercontent.com/ygreif/f9879149afbe2382006c867fe099dce8/raw/6874a3989e4bf2886183cf94ee743d399beebd40/gistfile1.txt \
     -o ~/.config/cliseer/settings.cfg
-  echo "Configure cliseer behavior from ~/.config/cliseer/settings.cfg"
+  echo "Configure cliseer AI provider in ~/.config/cliseer/settings.cfg"
 }
 
 cliseer_fzf_dependency() {
     if command -v fzf >/dev/null 2>&1; then
-        echo "fzf is installed"
         return 0
     fi
 
@@ -47,7 +75,9 @@ cliseer_fzf_dependency() {
   fi
 }
 
-# === Run the setup steps ===
 config_dependency
 cliseer_fzf_dependency
 cliprophesy_dependency
+
+echo "Dependency install script"
+
